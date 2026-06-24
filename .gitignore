@@ -1,0 +1,10 @@
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/src/**/__pycache__/
+*.pyc
+*.pyo
+
+# 環境變數
+.env.local
+.env.*.local

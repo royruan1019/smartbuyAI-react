@@ -1,18 +1,19 @@
-import './PriceCard.css';
+import { Badge } from './ui/badge';
+import { Card } from './ui/card';
 
-const badgeMap = {
-  '便宜':    'badge-green',
-  '正常':    'badge-gray',
-  '偏貴':    'badge-orange',
-  '資料不足': 'badge-gray',
+const badgeVariantMap = {
+  '便宜':    'green',
+  '正常':    'gray',
+  '偏貴':    'orange',
+  '資料不足': 'gray',
 };
 
-const recMap = {
-  '推薦購買':   'badge-green',
-  '可少量購買': 'badge-orange',
-  '改買替代品': 'badge-red',
-  '建議觀望':   'badge-red',
-  '資料不足':   'badge-gray',
+const recVariantMap = {
+  '推薦購買':   'green',
+  '可少量購買': 'orange',
+  '改買替代品': 'red',
+  '建議觀望':   'red',
+  '資料不足':   'gray',
 };
 
 export default function PriceCard({ item, onClick }) {
@@ -20,35 +21,42 @@ export default function PriceCard({ item, onClick }) {
   const rec         = item.recommendation;
 
   return (
-    <div className="price-card card" onClick={onClick} style={onClick ? { cursor: 'pointer' } : {}}>
-      <div className="pc-header">
-        <span className="pc-name">{item.product_name}</span>
-        <span className={`badge ${badgeMap[priceStatus] || 'badge-gray'}`}>
-          {priceStatus}
-        </span>
+    <Card
+      onClick={onClick}
+      className={onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <span className="font-bold text-[var(--green-dark)] text-base">{item.product_name}</span>
+        <Badge variant={badgeVariantMap[priceStatus] || 'gray'}>{priceStatus}</Badge>
       </div>
 
-      <div className="pc-price">
-        {item.today_price != null
-          ? <><span className="pc-amount">${item.today_price}</span><span className="pc-unit"> 元/公斤</span></>
-          : <span className="pc-na">暫無報價</span>
-        }
+      <div className="mb-2">
+        {item.today_price != null ? (
+          <>
+            <span className="text-2xl font-extrabold text-[var(--orange-dark)]">${item.today_price}</span>
+            <span className="text-sm text-[var(--text-muted)] ml-1">元/公斤</span>
+          </>
+        ) : (
+          <span className="text-sm text-[var(--text-muted)]">暫無報價</span>
+        )}
       </div>
 
-      {item.advice && <p className="pc-advice">{item.advice}</p>}
+      {item.advice && (
+        <p className="text-sm text-[var(--text-muted)] mb-2 leading-relaxed">{item.advice}</p>
+      )}
 
       {rec && (
-        <div className="pc-footer">
-          <span className={`badge ${recMap[rec] || 'badge-gray'}`}>{rec}</span>
+        <div className="flex items-center gap-2 flex-wrap mt-1">
+          <Badge variant={recVariantMap[rec] || 'gray'}>{rec}</Badge>
           {item.weather_risk && item.weather_risk !== '資料不足' && (
-            <span className="pc-weather">☁ 產地天氣：{item.weather_risk}</span>
+            <span className="text-xs text-[var(--text-muted)]">☁ 產地天氣：{item.weather_risk}</span>
           )}
         </div>
       )}
 
       {item.alternatives?.length > 0 && (
-        <p className="pc-alt">替代品：{item.alternatives.join('、')}</p>
+        <p className="text-xs text-[var(--text-muted)] mt-2">替代品：{item.alternatives.join('、')}</p>
       )}
-    </div>
+    </Card>
   );
 }

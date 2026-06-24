@@ -1,4 +1,5 @@
-import './SolarTermCard.css';
+import { Badge } from './ui/badge';
+import { Card } from './ui/card';
 
 const seasonEmoji = { 春: '🌸', 夏: '☀️', 秋: '🍂', 冬: '❄️' };
 
@@ -6,46 +7,46 @@ export default function SolarTermCard({ data }) {
   if (!data) return null;
   const emoji = seasonEmoji[data.season] || '🌿';
   return (
-    <div className="stc card">
-      <div className="stc-top">
-        <span className="stc-emoji">{emoji}</span>
+    <Card className="mb-4">
+      <div className="flex items-center gap-4 mb-3">
+        <span className="text-4xl">{emoji}</span>
         <div>
-          <p className="stc-label">現在節氣</p>
-          <h2 className="stc-name">{data.term_name}</h2>
-          <span className="stc-season badge badge-green">{data.season}季</span>
+          <p className="text-xs text-[var(--text-muted)] mb-0.5">現在節氣</p>
+          <h2 className="text-xl font-bold text-[var(--green-dark)]">{data.term_name}</h2>
+          <Badge variant="green" className="mt-1">{data.season}季</Badge>
         </div>
       </div>
-      <p className="stc-desc">{data.description}</p>
-      <div className="stc-tips">
+
+      <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-3">{data.description}</p>
+
+      <div className="space-y-1.5">
         {data.shopping_tip && (
-          <div className="stc-tip">
-            <span className="stc-tip-icon">🛒</span>
-            <span>{data.shopping_tip}</span>
+          <div className="flex items-start gap-2 text-sm">
+            <span>🛒</span><span>{data.shopping_tip}</span>
           </div>
         )}
         {data.health_tip && (
-          <div className="stc-tip">
-            <span className="stc-tip-icon">💚</span>
-            <span>{data.health_tip}</span>
+          <div className="flex items-start gap-2 text-sm">
+            <span>💚</span><span>{data.health_tip}</span>
           </div>
         )}
         {data.risk_note && (
-          <div className="stc-tip stc-tip-warn">
-            <span className="stc-tip-icon">⚠️</span>
-            <span>{data.risk_note}</span>
+          <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 rounded-lg px-3 py-2">
+            <span>⚠️</span><span>{data.risk_note}</span>
           </div>
         )}
       </div>
+
       {data.recommended_products?.length > 0 && (
-        <div className="stc-products">
-          <p className="stc-products-label">本節氣推薦食材</p>
-          <div className="stc-tags">
+        <div className="mt-3 pt-3 border-t border-[var(--border)]">
+          <p className="text-xs text-[var(--text-muted)] mb-2">本節氣推薦食材</p>
+          <div className="flex flex-wrap gap-1.5">
             {data.recommended_products.map(p => (
-              <span key={p} className="badge badge-green">{p}</span>
+              <Badge key={p} variant="green">{p}</Badge>
             ))}
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }
